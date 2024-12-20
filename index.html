@@ -110,6 +110,71 @@
             animation: spin 1s linear infinite;
         }
 
+        .search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #007bff;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+.search-bar input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.sticky-search {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensures it stays above other elements */
+    background: linear-gradient(to right, #ece9e6, #ffffff); /* Matches page background */
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #007bff;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+.search-bar input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -122,8 +187,10 @@
 </head>
 <body>
     <div class="container">
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search for games..." oninput="searchGames()">
+        <div class="sticky-search">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search for games..." oninput="searchGames()">
+            </div>
         </div>
         <h1>Game Downloads</h1>
         <div class="grid" id="game-list"></div>

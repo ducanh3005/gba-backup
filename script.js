@@ -1,12 +1,16 @@
-
-let allGames = []; // To store all games for searching
+// Array to store all games for searching
+let allGames = [];
 
 // Load JSON data from file
 async function loadGames() {
     const response = await fetch('games.json');
     const games = await response.json();
-    allGames = games; // Save all games for searching
-    displayGames(games);
+
+    // Filter out games with null download_link
+    const validGames = games.filter(game => game.download_link !== null);
+
+    allGames = validGames; // Save all valid games for searching
+    displayGames(validGames);
 }
 
 // Display games in a responsive grid
@@ -19,11 +23,14 @@ function displayGames(games) {
         gameItem.classList.add('game');
 
         gameItem.innerHTML = `
-            <img src="${game.image}" alt="${game.name}">
+            <img src="${game.thumbnail}" alt="${game.title}">
             <div class="game-info">
-                <h3>${game.name}</h3>
-                <p>Categories: ${game.categories.join(', ')}</p>
-                <a href="${game.downloadLink}" class="download-btn" target="_blank">Download</a>
+                <h3>${game.title}</h3>
+                <p><strong>Platform:</strong> ${game.platform}</p>
+                <p><strong>Region:</strong> ${game.region}</p>
+                <p><strong>Version:</strong> ${game.version}</p>
+                <p><strong>Release Date:</strong> ${new Date(game.date).toLocaleDateString()}</p>
+                <a href="${game.download_link}" class="download-btn" target="_blank">Download</a>
             </div>
         `;
 
@@ -35,8 +42,9 @@ function displayGames(games) {
 function searchGames() {
     const query = document.getElementById('search-input').value.toLowerCase();
     const filteredGames = allGames.filter(game => 
-        game.name.toLowerCase().includes(query) || 
-        game.categories.some(category => category.toLowerCase().includes(query))
+        game.title.toLowerCase().includes(query) || 
+        game.platform.toLowerCase().includes(query) ||
+        game.region.toLowerCase().includes(query)
     );
     displayGames(filteredGames);
 }
