@@ -6,37 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Downloads</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>/* General Styling */
         body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #ece9e6, #ffffff);
-            color: #333;
+            font-size: 16px;
         }
-
+        
         .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            background: #fff;
-            border-radius: 8px;
-            margin-top: 20px;
+            padding: 15px;
         }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #444;
+        
+        /* Search Bar */
+        .sticky-search {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: linear-gradient(to right, #ece9e6, #ffffff);
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-
+        
+        .search-bar {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            max-width: 600px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            border-color: #007bff;
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+        }
+        
+        .search-bar input::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+        
+        /* Responsive Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
-
+        
         .game {
             background: #fff;
             border: 1px solid #ddd;
@@ -45,34 +68,34 @@
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease;
         }
-
+        
         .game:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
-
+        
         .game img {
             width: 100%;
             height: auto;
         }
-
+        
         .game-info {
             padding: 15px;
             text-align: center;
         }
-
+        
         .game-info h3 {
             margin: 0 0 10px;
             font-size: 18px;
             color: #333;
         }
-
+        
         .game-info p {
             margin: 0 0 10px;
             color: #666;
             font-size: 14px;
         }
-
+        
         .download-btn {
             display: inline-block;
             padding: 10px 15px;
@@ -86,104 +109,67 @@
             border: none;
             transition: background 0.3s ease;
         }
-
+        
         .download-btn:hover {
             background: #0056b3;
         }
-
-        .download-btn:disabled {
-            background: #ddd;
-            cursor: not-allowed;
-        }
-
-        .download-btn.success {
-            background: #28a745;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        .search-bar {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.search-bar input {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    outline: none;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.search-bar input:focus {
-    border-color: #007bff;
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
-}
-
-.search-bar input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-.sticky-search {
-    position: sticky;
-    top: 0;
-    z-index: 1000; /* Ensures it stays above other elements */
-    background: linear-gradient(to right, #ece9e6, #ffffff); /* Matches page background */
-    padding: 10px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
-}
-
-.search-bar {
-    display: flex;
-    justify-content: center;
-}
-
-.search-bar input {
-    width: 100%;
-    max-width: 600px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    outline: none;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.search-bar input:focus {
-    border-color: #007bff;
-    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
-}
-
-.search-bar input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
+        
+        /* Responsive Styling for Smaller Screens */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr); /* Two columns for smaller screens */
+                gap: 15px;
             }
-            100% {
-                transform: rotate(360deg);
+        
+            .game-info h3 {
+                font-size: 16px;
+            }
+        
+            .game-info p {
+                font-size: 13px;
+            }
+        
+            .download-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        
+            .search-bar input {
+                max-width: 100%;
+                font-size: 14px;
+                padding: 10px 15px;
             }
         }
-    </style>
+        
+        /* Very Small Screens (Phones) */
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr); /* Maintain two columns on phones */
+                gap: 10px;
+            }
+        
+            .game-info h3 {
+                font-size: 14px;
+            }
+        
+            .game-info p {
+                font-size: 12px;
+            }
+        
+            .download-btn {
+                padding: 6px 10px;
+            }
+        
+            .search-bar input {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+        
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+        </style>
 </head>
 <body>
     <div class="container">
@@ -192,7 +178,6 @@
                 <input type="text" id="search-input" placeholder="Search for games..." oninput="searchGames()">
             </div>
         </div>
-        <h1>Game Downloads</h1>
         <div class="grid" id="game-list"></div>
     </div>
     <script src="script.js"></script>
