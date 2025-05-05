@@ -40,6 +40,11 @@
             color: var(--color-text);
             font-family: 'Press Start 2P', 'Poppins', 'Roboto', Arial, sans-serif;
             transition: background 0.3s, color 0.3s;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
         }
         .container {
             padding: 15px;
@@ -793,5 +798,31 @@
         <div id="pagination" class="pagination-bar"></div>
     </div>
     <script src="script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Theme toggle
+        const btn = document.getElementById('theme-toggle-btn');
+        let isLight = false;
+        btn.addEventListener('click', function() {
+            isLight = !isLight;
+            setTheme(isLight);
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+        // Load theme from localStorage
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            isLight = true;
+            setTheme(true);
+        }
+        // Disable long press actions
+        document.body.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.body.addEventListener('selectstart', function(e) { e.preventDefault(); });
+        document.body.addEventListener('dragstart', function(e) { e.preventDefault(); });
+        document.body.addEventListener('touchstart', function(e) {
+            if (e.touches && e.touches.length > 1) e.preventDefault();
+        }, { passive: false });
+        document.body.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+    });
+    </script>
 </body>
 </html>
