@@ -329,8 +329,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Loading overlay
     const overlay = document.getElementById('loading-overlay');
+    let overlayHidden = false;
     function hideOverlay() {
-        if (!overlay.classList.contains('hide')) {
+        if (!overlayHidden) {
+            overlayHidden = true;
             overlay.classList.add('hide');
             setTimeout(() => overlay.style.display = 'none', 600);
         }
@@ -339,9 +341,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(hideOverlay, 400);
     });
     setTimeout(hideOverlay, 3000); // fallback in case load event is slow
-    document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(hideOverlay, 800);
-    });
 });
 
 // Load the games data
