@@ -98,74 +98,127 @@ function renderHotGames(hotGames) {
     const hotGamesList = document.getElementById('hot-games');
     if (!hotGamesList) return;
     hotGamesList.innerHTML = '';
+    
+    if (!hotGames || hotGames.length === 0) {
+        hotGamesList.innerHTML = '<div style="width:100%; text-align:center; padding:20px; color:var(--color-accent);">No hot games available</div>';
+        return;
+    }
+    
     // Filter by currentHotCategory if not 'All'
     let filtered = hotGames;
     if (currentHotCategory !== 'All') {
         const keyword = currentHotCategory.toLowerCase();
         filtered = hotGames.filter(game => game.title && game.title.toLowerCase().includes(keyword));
     }
+    
     filtered.forEach(game => {
-        const card = document.createElement('div');
-        card.className = 'hot-game-card';
-        card.innerHTML = `
-            <img src="${game.thumbnail}" alt="${game.title}">
-            <div class="hot-game-info">
-                <h3>${game.title}</h3>
-                <p><strong>Platform:</strong> ${game.platform}</p>
-                <a href="${game.download_link}" class="download-btn" target="_blank">Download</a>
-            </div>
-        `;
-        setTimeout(() => {
+        try {
+            if (!game.thumbnail || !game.title || !game.platform || !game.download_link) {
+                console.warn("Skipping invalid hot game:", game);
+                return;
+            }
+            
+            const card = document.createElement('div');
+            card.className = 'hot-game-card';
+            
+            // Use a default image if the thumbnail is missing or broken
+            const imgSrc = game.thumbnail || 'https://placehold.co/200x200/23233a/ffb700?text=Game';
+            
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="${game.title}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/23233a/ffb700?text=Game';">
+                <div class="hot-game-info">
+                    <h3>${game.title}</h3>
+                    <p><strong>Platform:</strong> ${game.platform}</p>
+                    <a href="${game.download_link}" class="download-btn" target="_blank">Download</a>
+                </div>
+            `;
+            
+            // Add event listeners after element is in the DOM
+            hotGamesList.appendChild(card);
+            
             const btn = card.querySelector('.download-btn');
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (btn.disabled) return;
-                btn.disabled = true;
-                const originalText = btn.textContent;
-                let count = 5;
-                btn.textContent = `Wait ${count}...`;
-                const interval = setInterval(() => {
-                    count--;
-                    if (count > 0) {
-                        btn.textContent = `Wait ${count}...`;
-                    } else {
-                        clearInterval(interval);
-                        btn.textContent = originalText;
-                        btn.disabled = false;
-                        window.open(game.download_link, '_blank');
-                    }
-                }, 1000);
-            });
-            btn.addEventListener('click', function(e) {
-                // Ripple effect
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple';
-                const rect = btn.getBoundingClientRect();
-                ripple.style.left = (e.clientX - rect.left) + 'px';
-                ripple.style.top = (e.clientY - rect.top) + 'px';
-                btn.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
-        }, 0);
-        hotGamesList.appendChild(card);
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (btn.disabled) return;
+                    
+                    btn.disabled = true;
+                    const originalText = btn.textContent;
+                    let count = 5;
+                    btn.textContent = `Wait ${count}...`;
+                    
+                    const interval = setInterval(() => {
+                        count--;
+                        if (count > 0) {
+                            btn.textContent = `Wait ${count}...`;
+                        } else {
+                            clearInterval(interval);
+                            btn.textContent = originalText;
+                            btn.disabled = false;
+                            
+                            if (game.download_link) {
+                                window.open(game.download_link, '_blank');
+                            }
+                        }
+                    }, 1000);
+                    
+                    // Ripple effect
+                    const ripple = document.createElement('span');
+                    ripple.className = 'ripple';
+                    const rect = btn.getBoundingClientRect();
+                    ripple.style.left = (e.clientX - rect.left) + 'px';
+                    ripple.style.top = (e.clientY - rect.top) + 'px';
+                    btn.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            }
+        } catch (error) {
+            console.error("Error rendering hot game card:", error);
+        }
     });
+    
+    if (hotGamesList.children.length === 0) {
+        hotGamesList.innerHTML = '<div style="width:100%; text-align:center; padding:20px; color:var(--color-accent);">No matching hot games found</div>';
+    }
 }
 
 // Load JSON data from file
 async function loadGames() {
-    const response = await fetch('games.json');
-    const games = await response.json();
-    const validGames = games.filter(game => game.download_link !== null);
-    allGames = validGames;
-    filteredGames = validGames;
-    populateFilters(validGames);
-    // Hot games
-    currentHotGames = getHotGames(validGames);
-    renderHotCategories();
-    renderHotGames(currentHotGames);
-    displayGames(validGames);
-    const hotGamesSection = document.getElementById('hot-games-section');
-    if (hotGamesSection) hotGamesSection.style.display = '';
+    try {
+        const response = await fetch('games.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch games: ${response.status} ${response.statusText}`);
+        }
+        const games = await response.json();
+        const validGames = games.filter(game => game.download_link !== null);
+        
+        if (validGames.length === 0) {
+            console.error("No valid games found in the data");
+            return;
+        }
+        
+        allGames = validGames;
+        filteredGames = validGames;
+        populateFilters(validGames);
+        
+        // Hot games
+        try {
+            currentHotGames = getHotGames(validGames);
+            renderHotCategories();
+            renderHotGames(currentHotGames);
+        } catch (hotError) {
+            console.error("Error rendering hot games:", hotError);
+        }
+        
+        displayGames(validGames);
+        const hotGamesSection = document.getElementById('hot-games-section');
+        if (hotGamesSection) hotGamesSection.style.display = '';
+    } catch (error) {
+        console.error("Error loading games:", error);
+        document.getElementById('game-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #f357a8; font-size: 1.2em;">Error loading games. Please try again later.</div>';
+    }
 }
 
 function renderPagination(totalGames, currentPage) {
