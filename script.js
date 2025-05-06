@@ -124,56 +124,17 @@ function renderHotGames(hotGames) {
             // Use a default image if the thumbnail is missing or broken
             const imgSrc = game.thumbnail || 'https://placehold.co/200x200/23233a/ffb700?text=Game';
             
+            // Dùng thẻ a đơn giản với target="_blank" - không sử dụng preventDefault() hay đếm ngược
             card.innerHTML = `
                 <img src="${imgSrc}" alt="${game.title}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/23233a/ffb700?text=Game';">
                 <div class="hot-game-info">
                     <h3>${game.title}</h3>
                     <p><strong>Platform:</strong> ${game.platform}</p>
-                    <a href="${game.download_link}" class="download-btn" target="_blank">Download</a>
+                    <a href="${game.download_link}" class="download-btn" target="_blank" rel="noopener">Download</a>
                 </div>
             `;
             
-            // Add event listeners after element is in the DOM
             hotGamesList.appendChild(card);
-            
-            const btn = card.querySelector('.download-btn');
-            if (btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    if (btn.disabled) return;
-                    
-                    btn.disabled = true;
-                    const originalText = btn.textContent;
-                    let count = 5;
-                    btn.textContent = `Wait ${count}...`;
-                    
-                    const interval = setInterval(() => {
-                        count--;
-                        if (count > 0) {
-                            btn.textContent = `Wait ${count}...`;
-                        } else {
-                            clearInterval(interval);
-                            btn.textContent = originalText;
-                            btn.disabled = false;
-                            
-                            if (game.download_link) {
-                                window.open(game.download_link, '_blank');
-                            }
-                        }
-                    }, 1000);
-                    
-                    // Ripple effect
-                    const ripple = document.createElement('span');
-                    ripple.className = 'ripple';
-                    const rect = btn.getBoundingClientRect();
-                    ripple.style.left = (e.clientX - rect.left) + 'px';
-                    ripple.style.top = (e.clientY - rect.top) + 'px';
-                    btn.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 600);
-                });
-            }
         } catch (error) {
             console.error("Error rendering hot game card:", error);
         }
