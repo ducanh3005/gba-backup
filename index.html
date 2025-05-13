@@ -9,30 +9,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg: #181824;
-            --color-bg-secondary: #23233a;
-            --color-text: #f3f3f3;
-            --color-accent: #ffb700;
-            --color-accent2: #ff3c38;
-            --color-card: #23233a;
-            --color-card-hover: #23233a;
-            --color-btn: #ffb700;
-            --color-btn-hover: #ff3c38;
-            --color-btn-text: #23233a;
+            --color-bg: #392467;
+            --color-bg-secondary: #4B2D7F;
+            --color-text: #FFFFFF;
+            --color-accent: #E26EE5;
+            --color-accent2: #8FE1FF;
+            --color-card: #E26EE5;
+            --color-card-hover: #F180FF;
+            --color-btn: #8FE1FF;
+            --color-btn-hover: #E26EE5;
+            --color-btn-text: #392467;
             --color-btn-text-hover: #fff;
+            --color-btn-glow: #F180FF;
         }
         body.light-mode {
-            --color-bg: #fffbe6;
-            --color-bg-secondary: #fff;
-            --color-text: #23233a;
-            --color-accent: #ffb700;
-            --color-accent2: #ff3c38;
-            --color-card: #fff;
-            --color-card-hover: #ffe9a7;
-            --color-btn: #ffb700;
-            --color-btn-hover: #ff3c38;
-            --color-btn-text: #23233a;
-            --color-btn-text-hover: #fff;
+            --color-bg: #f6f2ff;
+            --color-bg-secondary: #e9dcff;
+            --color-text: #ffffff;
+            --color-accent: #ff006f;
+            --color-accent2: #00a0c0;
+            --color-card: #280064;
+            --color-card-hover: #3b0a8c;
+            --color-btn: #ff006f;
+            --color-btn-hover: #00a0c0;
+            --color-btn-text: #ffffff;
+            --color-btn-text-hover: #ffffff;
+            --color-btn-glow: #ff70e5;
         }
         body, *, a, img, button, input, textarea {
             -webkit-user-select: none !important;
@@ -46,7 +48,9 @@
             background: var(--color-bg);
             color: var(--color-text);
             font-family: 'Press Start 2P', 'Poppins', 'Roboto', Arial, sans-serif;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.5s ease, color 0.5s ease;
+            background-image: linear-gradient(0deg, #392467 0%, #4B2D7F 100%);
+            background-attachment: fixed;
         }
         .container {
             padding: 15px;
@@ -57,13 +61,16 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: var(--color-bg-secondary);
+            background: rgba(75, 45, 127, 0.8);
             padding: 20px 0 10px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 15px var(--color-accent), 0 2px 5px rgba(0, 0, 0, 0.2);
             border-bottom: 4px solid var(--color-accent);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background-image: linear-gradient(90deg, rgba(57, 36, 103, 0.9) 0%, rgba(75, 45, 127, 0.9) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         .theme-toggle-btn {
             background: var(--color-card);
@@ -178,10 +185,16 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: #23233a;
+            background: rgba(75, 45, 127, 0.8);
             padding: 20px 0 10px 0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            border-bottom: 4px solid #ffb700;
+            box-shadow: 0 0 15px var(--color-accent), 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-bottom: 4px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-image: linear-gradient(90deg, rgba(57, 36, 103, 0.9) 0%, rgba(75, 45, 127, 0.9) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         
         .search-bar-row {
@@ -202,23 +215,23 @@
             max-width: 400px;
             padding: 14px 20px;
             font-size: 14px;
-            border: 3px solid #ffb700;
+            border: 3px solid var(--color-accent);
             border-radius: 0;
-            background: #23233a;
-            color: #fff;
+            background: #4B2D7F;
+            color: #FFFFFF;
             font-family: 'Press Start 2P', monospace;
             outline: none;
-            box-shadow: 0 4px 0 #ffb700;
+            box-shadow: 0 0 10px var(--color-accent), 0 4px 0 var(--color-accent);
             letter-spacing: 1px;
         }
         
         .search-bar input:focus {
-            border-color: #ff3c38;
-            box-shadow: 0 4px 0 #ff3c38;
+            border-color: var(--color-accent2);
+            box-shadow: 0 0 15px var(--color-accent2), 0 4px 0 var(--color-accent2);
         }
         
         .search-bar input::placeholder {
-            color: #aaa;
+            color: rgba(233, 224, 255, 0.6);
             font-style: italic;
             font-family: 'Press Start 2P', monospace;
         }
@@ -231,10 +244,11 @@
         }
         
         .filter-inline label {
-            color: #ffb700;
+            color: var(--color-accent);
             font-size: 13px;
             font-family: 'Press Start 2P', monospace;
             margin-right: 6px;
+            text-shadow: 0 0 5px var(--color-accent);
         }
         
         .filters {
@@ -276,16 +290,19 @@
         
         .game {
             background: var(--color-card);
-            border: 4px solid var(--color-accent);
+            border: 4px solid var(--color-accent2);
             border-radius: 0;
             overflow: hidden;
-            box-shadow: 0 6px 0 var(--color-accent2);
+            box-shadow: 0 0 10px var(--color-accent2), 0 6px 0 var(--color-bg-secondary);
             transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            position: relative;
+            z-index: 1;
         }
         
         .game:hover {
             transform: translateY(-7px) scale(1.03);
-            box-shadow: 0 12px 0 var(--color-accent);
+            box-shadow: 0 0 15px var(--color-accent), 0 12px 0 var(--color-bg-secondary);
+            background: var(--color-card-hover);
         }
         
         .game img {
@@ -297,11 +314,15 @@
             background: #181824;
             border-bottom: 2px solid var(--color-accent);
             display: block;
+            position: relative;
+            z-index: 1;
         }
         
         .game-info {
             padding: 18px 12px 16px 12px;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
         
         .game-info h3 {
@@ -309,7 +330,8 @@
             font-size: 0.7em;
             color: var(--color-text);
             font-family: 'Press Start 2P', monospace;
-            text-shadow: 1px 1px 0 var(--color-accent);
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+            font-weight: bold;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -317,6 +339,7 @@
             text-overflow: ellipsis;
             min-height: 2.2em;
             max-height: 2.2em;
+            position: relative;
         }
         
         .game-info p {
@@ -326,29 +349,130 @@
             font-family: 'Press Start 2P', monospace;
         }
         
+        /* Cập nhật màu nút download để nổi bật hơn */
         .download-btn {
             display: inline-block;
             padding: 10px 18px;
-            background: var(--color-accent);
-            color: var(--color-btn-text);
+            background: #00FFCC;
+            color: #392467;
             text-decoration: none;
             border-radius: 0;
             font-size: 13px;
             font-family: 'Press Start 2P', monospace;
-            font-weight: 700;
+            font-weight: bold;
             cursor: pointer;
-            border: 2px solid var(--color-accent);
-            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 0 var(--color-accent2);
+            border: 2px solid #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 12px #00FFCC, 0 2px 0 var(--color-bg-secondary);
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
+            letter-spacing: 1.2px;
+            animation: neon-pulse-btn 1.5s infinite alternate;
+        }
+        
+        /* Hiệu ứng chạy sáng từ trái sang phải */
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: 0.5s;
+            animation: glitter-slide 3s infinite;
+        }
+        
+        /* Hiệu ứng ready-to-download của giao diện retro 80s */
+        .download-btn::after {
+            content: 'READY';
+            position: absolute;
+            font-size: 8px;
+            top: -12px;
+            right: 5px;
+            color: #1AFF7A;
+            opacity: 0;
+            text-shadow: 0 0 5px #1AFF7A;
+            animation: ready-blink 2s infinite;
+        }
+        
+        @keyframes ready-blink {
+            0%, 49% {
+                opacity: 0;
+            }
+            50%, 100% {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes glitter-slide {
+            0% {
+                left: -100%;
+            }
+            20%, 100% {
+                left: 100%;
+            }
+        }
+        
+        @keyframes neon-pulse-btn {
+            0% {
+                box-shadow: 0 0 12px #00FFCC, 0 2px 0 var(--color-bg-secondary);
+                background: #00FFCC;
+                border-color: #ffffff;
+            }
+            100% {
+                box-shadow: 0 0 20px #00FFCC, 0 0 40px #00FFCC, 0 2px 0 var(--color-bg-secondary);
+                background: #1AFFBE;
+                border-color: #ffffff;
+            }
         }
         
         .download-btn:hover {
-            background: var(--color-accent2);
-            color: var(--color-btn-text-hover);
-            box-shadow: 0 2px 0 var(--color-accent);
+            background: #1AFF7A;
+            color: #392467;
+            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
+            animation: none;
+            text-shadow: none;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn:hover::before {
+            animation: glitter-slide 1s infinite;
+        }
+        
+        /* Hiệu ứng cho các nút download khi hover */
+        .game:hover .download-btn, 
+        .hot-game-card:hover .download-btn {
+            background: #1AFF7A;
+            color: #392467;
+            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
+            border-color: #ffffff;
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        /* Hiệu ứng nút download trong hot game cards */
+        .hot-game-info .download-btn {
+            font-size: 10px;
+            padding: 6px 12px;
+            border-radius: 0;
+            border: 2px solid #ffffff;
+            background: #00FFCC;
+            color: #392467;
+            font-family: 'Press Start 2P', monospace;
+            font-weight: 700;
+            box-shadow: 0 0 12px #00FFCC, 0 1px 0 var(--color-bg-secondary);
+            text-transform: uppercase;
+            animation: neon-pulse-btn 1.5s infinite alternate;
+            letter-spacing: 1px;
+        }
+        
+        .hot-game-info .download-btn:hover {
+            background: #1AFF7A;
+            color: #392467;
+            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
+            animation: none;
+            border-color: #ffffff;
         }
         
         .download-btn .ripple {
@@ -517,7 +641,7 @@
             margin: 32px 0 12px 0;
             font-family: 'Press Start 2P', monospace;
             letter-spacing: 1px;
-            text-shadow: 2px 2px 0 var(--color-btn-text);
+            text-shadow: 2px 2px 0 var(--color-btn-text), 0 0 10px var(--color-accent);
         }
         #hot-games-section {
             max-width: 1200px;
@@ -536,9 +660,9 @@
             min-width: 150px;
             max-width: 170px;
             background: var(--color-card);
-            border: 4px solid var(--color-accent);
+            border: 4px solid var(--color-accent2);
             border-radius: 0;
-            box-shadow: 0 4px 0 var(--color-accent2);
+            box-shadow: 0 0 10px var(--color-accent2), 0 4px 0 var(--color-bg-secondary);
             overflow: hidden;
             flex-shrink: 0;
             display: flex;
@@ -546,10 +670,13 @@
             align-items: center;
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out;
             will-change: transform;
+            position: relative;
+            z-index: 1;
         }
         .hot-game-card:hover {
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 0 var(--color-accent);
+            box-shadow: 0 0 15px var(--color-accent), 0 8px 0 var(--color-bg-secondary);
+            background: var(--color-card-hover);
         }
         .hot-game-card img {
             width: 100%;
@@ -563,13 +690,16 @@
         .hot-game-info {
             padding: 10px 8px 12px 8px;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
         .hot-game-info h3 {
             font-size: 0.65em;
             color: var(--color-text);
             margin: 0 0 7px 0;
             font-family: 'Press Start 2P', monospace;
-            text-shadow: 1px 1px 0 var(--color-accent);
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+            font-weight: bold;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -577,6 +707,7 @@
             text-overflow: ellipsis;
             min-height: 2.2em;
             max-height: 2.2em;
+            position: relative;
         }
         .hot-game-info p {
             color: var(--color-accent);
@@ -588,36 +719,41 @@
             font-size: 10px;
             padding: 6px 12px;
             border-radius: 0;
-            border: 2px solid var(--color-accent);
-            background: var(--color-accent);
-            color: var(--color-btn-text);
+            border: 2px solid #ffffff;
+            background: #00FFCC;
+            color: #392467;
             font-family: 'Press Start 2P', monospace;
             font-weight: 700;
-            box-shadow: 0 1px 0 var(--color-accent2);
+            box-shadow: 0 0 12px #00FFCC, 0 1px 0 var(--color-bg-secondary);
             text-transform: uppercase;
+            animation: neon-pulse-btn 1.5s infinite alternate;
+            letter-spacing: 1px;
         }
         .hot-game-info .download-btn:hover {
-            background: var(--color-accent2);
-            color: var(--color-btn-text-hover);
-            box-shadow: 0 2px 0 var(--color-accent);
+            background: #1AFF7A;
+            color: #392467;
+            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
+            animation: none;
+            border-color: #ffffff;
         }
         .filter-inline select {
             padding: 14px 32px 14px 14px;
             border-radius: 0;
             border: 3px solid var(--color-accent);
-            background: var(--color-card) url('data:image/svg+xml;utf8,<svg fill="%23ffb700" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center/18px 18px;
+            background: var(--color-card) url('data:image/svg+xml;utf8,<svg fill="%23ff36d0" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 12px center/18px 18px;
             color: var(--color-text);
             font-size: 14px;
             min-width: 110px;
             appearance: none;
             outline: none;
             font-family: 'Press Start 2P', monospace;
-            box-shadow: 0 4px 0 var(--color-accent);
+            box-shadow: 0 0 8px var(--color-accent), 0 4px 0 var(--color-accent);
         }
         .filter-inline select:focus {
             border: 3px solid var(--color-accent2);
             background-color: var(--color-card-hover);
             color: var(--color-text);
+            box-shadow: 0 0 12px var(--color-accent2), 0 4px 0 var(--color-accent2);
         }
         .toggle-view-btn {
             margin-left: 18px;
@@ -676,10 +812,10 @@
         .game.list-item {
             display: flex;
             align-items: center;
-            background: var(--color-btn-text);
-            border: 4px solid var(--color-accent);
+            background: var(--color-E26EE5);
+            border: 4px solid var(--color-accent2);
             border-radius: 0;
-            box-shadow: 0 6px 0 var(--color-accent2);
+            box-shadow: 0 0 10px var(--color-accent2), 0 6px 0 var(--color-bg-secondary);
             padding: 0;
             gap: 0;
             min-height: 120px;
@@ -779,6 +915,560 @@
             text-shadow: 2px 2px 0 var(--color-accent2);
             user-select: none;
         }
+        /* Thêm hiệu ứng grid retro */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(0deg, transparent 24%, rgba(58, 224, 233, 0.05) 25%, rgba(58, 224, 233, 0.05) 26%, transparent 27%, transparent 74%, rgba(58, 224, 233, 0.05) 75%, rgba(58, 224, 233, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(58, 224, 233, 0.05) 25%, rgba(58, 224, 233, 0.05) 26%, transparent 27%, transparent 74%, rgba(58, 224, 233, 0.05) 75%, rgba(58, 224, 233, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+        
+        /* Thêm hiệu ứng scanline retro */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+        
+        /* CSS cho background gradient trong chế độ Light */
+        body.light-mode {
+            background-image: linear-gradient(0deg, #f6f2ff 0%, #eee2ff 100%);
+        }
+        
+        /* Thêm grid pattern khác cho Light mode */
+        body.light-mode::before {
+            background-image: linear-gradient(0deg, transparent 24%, rgba(82, 0, 255, 0.03) 25%, rgba(82, 0, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(82, 0, 255, 0.03) 75%, rgba(82, 0, 255, 0.03) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(82, 0, 255, 0.03) 25%, rgba(82, 0, 255, 0.03) 26%, transparent 27%, transparent 74%, rgba(82, 0, 255, 0.03) 75%, rgba(82, 0, 255, 0.03) 76%, transparent 77%, transparent);
+        }
+        
+        /* Giảm độ tối của scanline trong Light mode */
+        body.light-mode::after {
+            opacity: 0.15;
+        }
+        
+        /* Hiệu ứng glow cho cards trong Light mode */
+        body.light-mode .game, 
+        body.light-mode .hot-game-card {
+            background: #280064;
+            border: 4px solid #ff006f;
+            box-shadow: 0 0 10px rgba(255, 0, 111, 0.3), 0 6px 0 #00a0c0;
+        }
+        
+        body.light-mode .game:hover,
+        body.light-mode .hot-game-card:hover {
+            background: #3b0a8c;
+            border: 4px solid #ff006f;
+            box-shadow: 0 0 15px rgba(255, 0, 111, 0.5), 0 12px 0 #00a0c0;
+        }
+        
+        /* Tăng độ tương phản cho text trong card */
+        body.light-mode .game-info h3,
+        body.light-mode .hot-game-info h3 {
+            color: #ffffff;
+            text-shadow: 1px 1px 0 #000000;
+            font-weight: bold;
+        }
+        
+        body.light-mode .game-info p,
+        body.light-mode .hot-game-info p {
+            color: #ff70e5;
+        }
+        
+        /* Thêm viền ngăn cách cho các card */
+        body.light-mode .game,
+        body.light-mode .hot-game-card {
+            position: relative;
+        }
+        
+        body.light-mode .game:after,
+        body.light-mode .hot-game-card:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: -1px;
+            right: -1px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff006f, #00a0c0);
+            z-index: 1;
+        }
+        
+        /* Làm nổi bật màu của một số thẻ game ngẫu nhiên để tăng sự đa dạng */
+        body.light-mode .game:nth-child(3n+1) {
+            background: #220052;
+            border-color: #00a0c0;
+        }
+        
+        body.light-mode .game:nth-child(5n+2) {
+            background: #2c0075;
+            border-color: #9d00ff;
+        }
+        
+        body.light-mode .game:nth-child(7n+3) {
+            background: #25005e;
+            border-color: #ff9100;
+        }
+        
+        body.light-mode .hot-game-card:nth-child(2n+1) {
+            background: #220052;
+            border-color: #00a0c0;
+        }
+        
+        body.light-mode .hot-game-card:nth-child(3n+2) {
+            background: #2c0075;
+            border-color: #9d00ff;
+        }
+        
+        /* Điều chỉnh màu search và filter trong Light mode */
+        body.light-mode .search-bar input {
+            background: #ffffff;
+            border-color: #ff006f;
+            color: #280064;
+            box-shadow: 0 0 8px rgba(255, 0, 111, 0.3), 0 4px 0 #ff006f;
+        }
+        
+        body.light-mode .search-bar input::placeholder {
+            color: #8f45c7;
+        }
+        
+        body.light-mode .filter-inline select {
+            background-color: rgba(255, 255, 255, 0.8);
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ff006f" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            color: #280064;
+            border-color: #ff006f;
+            box-shadow: 0 0 8px rgba(255, 0, 111, 0.3), 0 4px 0 #ff006f;
+        }
+        
+        body.light-mode .filter-inline label {
+            color: #ff006f;
+            text-shadow: 0 0 3px rgba(255, 0, 111, 0.3);
+            font-weight: bold;
+        }
+        
+        /* Hiệu ứng khác cho nút trong Light mode */
+        body.light-mode .download-btn {
+            background: #ff006f;
+            box-shadow: 0 0 8px rgba(255, 0, 111, 0.5), 0 2px 0 #00a0c0;
+            border-color: #ff006f;
+            animation: neon-pulse-light 1.5s infinite alternate;
+        }
+        
+        @keyframes neon-pulse-light {
+            0% {
+                box-shadow: 0 0 8px rgba(255, 0, 111, 0.5), 0 2px 0 #00a0c0;
+                background: #ff006f;
+                border-color: #ff006f;
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(255, 0, 111, 0.7), 0 0 30px rgba(255, 0, 111, 0.4), 0 2px 0 #00a0c0;
+                background: #ff4b9b;
+                border-color: #ffffff;
+            }
+        }
+        
+        body.light-mode .sticky-search {
+            background: rgba(233, 220, 255, 0.8);
+            background-image: linear-gradient(90deg, rgba(233, 220, 255, 0.9) 0%, rgba(216, 193, 255, 0.9) 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(40, 0, 100, 0.1);
+            border-bottom: 4px solid #ff006f;
+        }
+        
+        /* Điều chỉnh màu hot-title trong Light mode */
+        body.light-mode .hot-title {
+            color: #ff006f;
+            text-shadow: 1px 1px 0 rgba(40, 0, 100, 0.2);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        /* Thêm style cho theme-toggle-btn trong Light mode */
+        body.light-mode .theme-toggle-btn {
+            background: #ffffff;
+            color: #ff006f;
+            border: 2px solid #ff006f;
+            box-shadow: 0 0 8px rgba(255, 0, 111, 0.3), 0 2px 0 #00a0c0;
+        }
+        
+        body.light-mode .theme-toggle-btn:hover {
+            background: #ff006f;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 0, 111, 0.5), 0 2px 0 #00a0c0;
+        }
+        
+        /* Style cho hot-category-btn trong Light mode */
+        body.light-mode .hot-category-btn {
+            background: #ffffff;
+            color: #280064;
+            border: 2px solid #280064;
+            box-shadow: 0 0 5px rgba(40, 0, 100, 0.3), 0 2px 0 #280064;
+        }
+        
+        body.light-mode .hot-category-btn.active,
+        body.light-mode .hot-category-btn:hover {
+            background: #280064;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(40, 0, 100, 0.5), 0 2px 0 #00a0c0;
+            border-color: #ff006f;
+        }
+        
+        /* Style cho pagination-btn trong Light mode */
+        body.light-mode .pagination-btn {
+            background: #ffffff;
+            color: #280064;
+            border: 2px solid #280064;
+            box-shadow: 0 0 5px rgba(40, 0, 100, 0.3), 0 2px 0 #280064;
+        }
+        
+        body.light-mode .pagination-btn.active,
+        body.light-mode .pagination-btn:hover {
+            background: #280064;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(40, 0, 100, 0.5), 0 2px 0 #00a0c0;
+            border-color: #ff006f;
+        }
+        
+        /* Style cho toggle-view-btn trong Light mode */
+        body.light-mode .toggle-view-btn {
+            background: #ffffff;
+            color: #280064;
+            border: 3px solid #280064;
+            box-shadow: 0 0 8px rgba(40, 0, 100, 0.3), 0 4px 0 #280064;
+        }
+        
+        body.light-mode .toggle-view-btn.active,
+        body.light-mode .toggle-view-btn:hover {
+            background: #280064;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(40, 0, 100, 0.5), 0 4px 0 #00a0c0;
+            border-color: #ff006f;
+        }
+        
+        /* Thêm style cho theme-toggle-btn trong Light mode */
+        body.light-mode .theme-toggle-btn {
+            background: #ffffff;
+            color: #280064;
+            border: 2px solid #280064;
+            box-shadow: 0 0 8px rgba(40, 0, 100, 0.3), 0 2px 0 #280064;
+        }
+        
+        body.light-mode .theme-toggle-btn:hover {
+            background: #280064;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(40, 0, 100, 0.5), 0 2px 0 #00a0c0;
+        }
+        
+        /* Điều chỉnh màu cho filter */
+        body.light-mode .filter-inline label {
+            color: #280064;
+            text-shadow: none;
+            font-weight: bold;
+        }
+        
+        body.light-mode .filter-inline select {
+            background-color: #ffffff;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23280064" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            color: #280064;
+            border-color: #280064;
+            box-shadow: 0 0 8px rgba(40, 0, 100, 0.3), 0 4px 0 #280064;
+        }
+        
+        body.light-mode .filter-inline select:focus {
+            border-color: #ff006f;
+            box-shadow: 0 0 12px rgba(255, 0, 111, 0.5), 0 4px 0 #ff006f;
+        }
+        
+        /* Điều chỉnh màu hot-title trong Light mode */
+        body.light-mode .hot-title {
+            color: #280064;
+            text-shadow: 1px 1px 0 rgba(255, 0, 111, 0.2);
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        /* Điều chỉnh màu list-item trong Light mode */
+        body.light-mode .game.list-item {
+            background: #280064;
+        }
+        
+        .game.list-item:nth-child(2n) {
+            background: #331a9e;
+        }
+        
+        .game.list-item:hover {
+            background: #3c1db7;
+        }
+        
+        /* Cải thiện transition giữa chế độ Light và Dark */
+        *, *:before, *:after {
+            transition: background-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease, background-image 0.5s ease;
+        }
+        
+        /* Ẩn grid pattern trong Light mode để tăng độ tương phản */
+        body.light-mode::before {
+            opacity: 0.3;
+        }
+        
+        /* Giảm đậm scanline */
+        body.light-mode::after {
+            opacity: 0.08;
+        }
+        
+        /* Thêm style cho theme-toggle-btn trong Light mode */
+        body.light-mode .theme-toggle-btn {
+            background: #ffffff;
+            color: #280064;
+            border: 2px solid #280064;
+            box-shadow: 0 0 8px rgba(40, 0, 100, 0.3), 0 2px 0 #280064;
+        }
+        
+        body.light-mode .theme-toggle-btn:hover {
+            background: #280064;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(40, 0, 100, 0.5), 0 2px 0 #00a0c0;
+            border-color: #ff006f;
+        }
+        
+        /* Điều chỉnh thêm style cho image trong thẻ game */
+        body.light-mode .game img,
+        body.light-mode .hot-game-card img {
+            border-bottom-color: #ff006f;
+        }
+        
+        /* Hiệu ứng đặc biệt cho nút download trong các thẻ game */
+        body.light-mode .game:hover .download-btn,
+        body.light-mode .hot-game-card:hover .download-btn {
+            background: #ff006f;
+            box-shadow: 0 0 15px rgba(255, 0, 111, 0.7), 0 2px 0 #00a0c0;
+        }
+        
+        /* Hiệu ứng đặc biệt cho thẻ game trong Dark mode */
+        .game:nth-child(3n+1) {
+            background: #D253D8;
+            border-color: #8FE1FF;
+        }
+        
+        .game:nth-child(5n+2) {
+            background: #E26EE5;
+            border-color: #8FE1FF;
+        }
+        
+        .game:nth-child(7n+3) {
+            background: #F180FF;
+            border-color: #8FE1FF;
+        }
+        
+        .hot-game-card:nth-child(2n+1) {
+            background: #D253D8;
+            border-color: #8FE1FF;
+        }
+        
+        .hot-game-card:nth-child(3n+2) {
+            background: #F180FF;
+            border-color: #8FE1FF;
+        }
+        
+        /* Thêm border glow nổi bật cho thẻ game trong Dark mode */
+        .game {
+            position: relative;
+        }
+        
+        .game::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: transparent;
+            border-radius: 0;
+            border: 2px solid transparent;
+            box-shadow: 0 0 15px rgba(143, 225, 255, 0.5);
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .game::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent2));
+            z-index: 2;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .game:hover::after {
+            opacity: 1;
+            border-color: var(--color-accent2);
+            box-shadow: 0 0 20px rgba(143, 225, 255, 0.8);
+        }
+        
+        .game:hover::before {
+            opacity: 1;
+            height: 4px;
+        }
+        
+        /* Nâng cao độ tương phản cho text trong thẻ game */
+        .game-info h3, .hot-game-info h3 {
+            position: relative;
+            color: #392467;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            font-weight: bold;
+        }
+        
+        .game-info p, .hot-game-info p {
+            color: #392467;
+            font-weight: bold;
+        }
+        
+        /* Thêm hiệu ứng cho các nút download khi hover */
+        .game:hover .download-btn, 
+        .hot-game-card:hover .download-btn {
+            background-color: var(--color-accent);
+            color: var(--color-btn-text-hover);
+            box-shadow: 0 0 15px var(--color-accent), 0 0 25px var(--color-accent), 0 2px 0 var(--color-bg-secondary);
+            border-color: #ffffff;
+        }
+        
+        /* Thêm hiệu ứng border glow cho các thẻ game khi hover */
+        .game:hover, .hot-game-card:hover {
+            outline: 1px solid var(--color-accent2);
+        }
+        
+        /* Điều chỉnh hot game cards vầ hiệu ứng */
+        .hot-game-card {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hot-game-card::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: transparent;
+            border-radius: 0;
+            border: 2px solid transparent;
+            box-shadow: 0 0 15px rgba(143, 225, 255, 0.5);
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .hot-game-card:hover::after {
+            opacity: 1;
+            border-color: var(--color-accent2);
+            box-shadow: 0 0 20px rgba(143, 225, 255, 0.8);
+        }
+        
+        /* Hiệu ứng zoom ảnh khi hover */
+        .game img, .hot-game-card img {
+            transition: transform 0.3s ease;
+        }
+        
+        .game:hover img, .hot-game-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Điều chỉnh hiệu ứng animation của nút download */
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        
+        /* Tăng cường hiệu ứng viền gradient cho card */
+        .game::before, .hot-game-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent), var(--color-accent2));
+            z-index: 2;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .game:hover::before, .hot-game-card:hover::before {
+            opacity: 1;
+            height: 4px;
+        }
+        
+        /* Thêm hiệu ứng tương phản cho trạng thái list view */
+        .game.list-item {
+            background: #E26EE5;
+        }
+        
+        .game.list-item:nth-child(2n) {
+            background: #D253D8;
+        }
+        
+        .game.list-item:hover {
+            background: #F180FF;
+        }
+        
+        /* Hiệu ứng cho sidebar và các nút khác */
+        .theme-toggle-btn {
+            background: var(--color-bg-secondary);
+            color: var(--color-accent2);
+            border: 2px solid var(--color-accent2);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .theme-toggle-btn:hover {
+            background: var(--color-accent2);
+            color: var(--color-btn-text);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .hot-category-btn {
+            background: var(--color-bg-secondary);
+            color: var(--color-accent2);
+            border: 2px solid var(--color-accent2);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .hot-category-btn.active, .hot-category-btn:hover {
+            background: var(--color-accent2);
+            color: var(--color-btn-text);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .pagination-btn {
+            background: var(--color-bg-secondary);
+            color: var(--color-accent2);
+            border: 2px solid var(--color-accent2);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .pagination-btn.active, .pagination-btn:hover {
+            background: var(--color-accent2);
+            color: var(--color-btn-text);
+            box-shadow: 0 2px 0 var(--color-accent);
+        }
+        
+        .hot-title {
+            color: var(--color-accent2);
+            text-shadow: 2px 2px 0 var(--color-bg), 0 0 10px var(--color-accent2);
+        }
     </style>
 </head>
 <body>
@@ -789,8 +1479,8 @@
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="Search for games..." oninput="searchGames()">
                     <button id="toggle-view-btn" class="toggle-view-btn" type="button" onclick="toggleView()" aria-label="Toggle View">
-                        <span class="icon-grid" style="display:inline;vertical-align:middle;"><svg id="icon-grid" width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="6" height="6" fill="#ffb700" stroke="#23233a" stroke-width="2"/><rect x="12" y="2" width="6" height="6" fill="#ffb700" stroke="#23233a" stroke-width="2"/><rect x="2" y="12" width="6" height="6" fill="#ffb700" stroke="#23233a" stroke-width="2"/><rect x="12" y="12" width="6" height="6" fill="#ffb700" stroke="#23233a" stroke-width="2"/></svg></span>
-                        <span class="icon-list" style="display:none;vertical-align:middle;"><svg id="icon-list" width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="3" width="16" height="3" fill="#ffb700" stroke="#23233a" stroke-width="2"/><rect x="2" y="9" width="16" height="3" fill="#ffb700" stroke="#23233a" stroke-width="2"/><rect x="2" y="15" width="16" height="3" fill="#ffb700" stroke="#23233a" stroke-width="2"/></svg></span>
+                        <span class="icon-grid" style="display:inline;vertical-align:middle;"><svg id="icon-grid" width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="6" height="6" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/><rect x="12" y="2" width="6" height="6" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/><rect x="2" y="12" width="6" height="6" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/><rect x="12" y="12" width="6" height="6" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/></svg></span>
+                        <span class="icon-list" style="display:none;vertical-align:middle;"><svg id="icon-list" width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="3" width="16" height="3" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/><rect x="2" y="9" width="16" height="3" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/><rect x="2" y="15" width="16" height="3" fill="#ff36d0" stroke="#0a0442" stroke-width="2"/></svg></span>
                     </button>
                 </div>
                 <div class="filter-inline">
