@@ -54,6 +54,19 @@
         .container {
             touch-action: pan-y pinch-zoom;
         }
+        
+        /* Prevent hover-like effects on touch devices */
+        @media (hover: none) {
+            .game, .hot-game-card {
+                transition: none;
+            }
+            
+            /* Add subtle touch feedback */
+            .game:active, .hot-game-card:active {
+                opacity: 0.9;
+                transition: opacity 0.1s ease;
+            }
+        }
         body {
             font-size: 13px;
             background: var(--color-bg);
@@ -165,10 +178,23 @@
         .game, .hot-game-card {
             transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
         }
-        .game:hover, .game:focus, .hot-game-card:hover, .hot-game-card:focus {
-            background: var(--color-card-hover);
-            transform: translateY(-7px) scale(1.04);
-            box-shadow: 0 12px 0 var(--color-accent);
+        /* Only apply hover effects on devices that support hover */
+        @media (hover: hover) and (pointer: fine) {
+            .game:hover, .game:focus, .hot-game-card:hover, .hot-game-card:focus {
+                background: var(--color-card-hover);
+                transform: translateY(-7px) scale(1.04);
+                box-shadow: 0 12px 0 var(--color-accent);
+            }
+        }
+        
+        /* Touch-friendly active states for mobile */
+        @media (hover: none) {
+            .game:active, .hot-game-card:active {
+                background: var(--color-card-hover);
+                transform: translateY(-2px) scale(1.01);
+                box-shadow: 0 6px 0 var(--color-accent);
+                transition: all 0.1s ease;
+            }
         }
         .download-btn, .hot-category-btn, .toggle-view-btn {
             transition: background 0.18s, color 0.18s, box-shadow 0.18s, border 0.18s;
@@ -310,10 +336,12 @@
             z-index: 1;
         }
         
-        .game:hover {
-            transform: translateY(-7px) scale(1.03);
-            box-shadow: 0 0 15px var(--color-accent), 0 12px 0 var(--color-bg-secondary);
-            background: var(--color-card-hover);
+        @media (hover: hover) and (pointer: fine) {
+            .game:hover {
+                transform: translateY(-7px) scale(1.03);
+                box-shadow: 0 0 15px var(--color-accent), 0 12px 0 var(--color-bg-secondary);
+                background: var(--color-card-hover);
+            }
         }
         
         .game img {
@@ -685,10 +713,12 @@
             position: relative;
             z-index: 1;
         }
-        .hot-game-card:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 0 15px var(--color-accent), 0 8px 0 var(--color-bg-secondary);
-            background: var(--color-card-hover);
+        @media (hover: hover) and (pointer: fine) {
+            .hot-game-card:hover {
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 0 15px var(--color-accent), 0 8px 0 var(--color-bg-secondary);
+                background: var(--color-card-hover);
+            }
         }
         .hot-game-card img {
             width: 100%;
@@ -1566,33 +1596,71 @@
             el.addEventListener('contextmenu', preventContextMenu);
             el.addEventListener('selectstart', preventSelect);
             el.addEventListener('dragstart', preventDrag);
-            // Only prevent long press on specific elements, not touchstart
-            el.addEventListener('touchstart', function(e) {
-                // Only prevent if it's not a scroll gesture
-                if (e.touches.length === 1) {
-                    const startY = e.touches[0].clientY;
-                    const startTime = Date.now();
-                    
-                    const touchMove = function(moveEvent) {
-                        const deltaY = Math.abs(moveEvent.touches[0].clientY - startY);
-                        const deltaTime = Date.now() - startTime;
-                        
-                        // If user is scrolling (moved more than 10px vertically), allow it
-                        if (deltaY > 10) {
-                            el.removeEventListener('touchmove', touchMove);
-                            el.removeEventListener('touchend', touchEnd);
-                        }
-                    };
-                    
-                    const touchEnd = function() {
-                        el.removeEventListener('touchmove', touchMove);
-                        el.removeEventListener('touchend', touchEnd);
-                    };
-                    
-                    el.addEventListener('touchmove', touchMove, { passive: true });
-                    el.addEventListener('touchend', touchEnd, { passive: true });
+        });
+        
+        // Function to add improved touch handling for game cards
+        function addTouchHandling(card) {
+            let touchStartTime = 0;
+            let touchStartY = 0;
+            let touchStartX = 0;
+            let isScrolling = false;
+            
+            card.addEventListener('touchstart', function(e) {
+                touchStartTime = Date.now();
+                touchStartY = e.touches[0].clientY;
+                touchStartX = e.touches[0].clientX;
+                isScrolling = false;
+            }, { passive: true });
+            
+            card.addEventListener('touchmove', function(e) {
+                const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+                const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+                
+                // If user is scrolling (moved more than 15px), mark as scrolling
+                if (deltaY > 15 || deltaX > 15) {
+                    isScrolling = true;
                 }
             }, { passive: true });
+            
+            card.addEventListener('touchend', function(e) {
+                const touchDuration = Date.now() - touchStartTime;
+                
+                // Only trigger tap effect if not scrolling and quick tap
+                if (!isScrolling && touchDuration < 300) {
+                    // Quick visual feedback for touch
+                    card.style.opacity = '0.8';
+                    setTimeout(() => {
+                        card.style.opacity = '';
+                    }, 100);
+                }
+            }, { passive: true });
+        }
+        
+        // Apply touch handling to existing game cards
+        document.querySelectorAll('.game, .hot-game-card').forEach(addTouchHandling);
+        
+        // Observer to add touch handling to dynamically created cards
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        if (node.classList && (node.classList.contains('game') || node.classList.contains('hot-game-card'))) {
+                            addTouchHandling(node);
+                        }
+                        // Also check child elements
+                        const childCards = node.querySelectorAll && node.querySelectorAll('.game, .hot-game-card');
+                        if (childCards) {
+                            childCards.forEach(addTouchHandling);
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Start observing
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
         });
         // Prevent long press without interfering with scroll
         let pressTimer = null;
