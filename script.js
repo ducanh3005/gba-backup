@@ -5,13 +5,7 @@ const GAMES_PER_PAGE = 50;
 let currentPage = 1;
 let isListView = false;
 
-// List of hot franchises for category buttons
-const hotFranchises = [
-    'All', 'Pokemon', 'Mario', 'Zelda', 'Metroid', 'Castlevania', 'Fire Emblem', 'Advance Wars', 'Mega Man', 'Sonic', 'Kirby', 'Dragon Ball', 'Harvest Moon', 'Yu-Gi-Oh', 'Golden Sun', 'Bomberman', 'Contra', 'Street Fighter', 'King of Fighters', 'Tactics Ogre', 'Astro Boy', 'Pac-Man', 'Rayman', 'Star Wars', 'F-Zero', 'Super Monkey Ball', 'Gunstar', 'Ninja Turtles', 'Mortal Kombat', 'Tony Hawk', 'Crash Bandicoot', 'Spyro', 'Sims', 'Simpsons', 'Shrek', 'Spongebob', 'Monster Rancher', 'Medabots', 'Beyblade', 'Bionicle', 'Hamtaro', 'Muppet', 'Muppets', 'Madden', 'NBA', 'FIFA', 'NHL', 'Yu Yu Hakusho', 'Yoshi', 'Earthbound', 'Mother'
-];
 
-let currentHotCategory = 'All';
-let currentHotGames = [];
 
 // Utility to get unique values for a field
 function getUniqueValues(games, field) {
@@ -32,118 +26,11 @@ function populateFilters(games) {
         regions.map(r => `<option value="${r}">${r}</option>`).join('');
 }
 
-// Identify hot games: random 12 games each day, consistent for the same day
-function getHotGames(games) {
-    const HOT_GAMES_COUNT = 12;
-    // Use the current date as a seed (YYYY-MM-DD)
-    const today = new Date();
-    const seed = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    // Simple seeded random generator
-    function seededRandom(seedStr) {
-        let hash = 0;
-        for (let i = 0; i < seedStr.length; i++) {
-            hash = ((hash << 5) - hash) + seedStr.charCodeAt(i);
-            hash |= 0;
-        }
-        return function() {
-            hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b);
-            hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b);
-            hash ^= hash >>> 16;
-            return (hash >>> 0) / 4294967296;
-        };
-    }
-    const rand = seededRandom(seed);
-    // Shuffle games array using seeded random
-    const shuffled = games.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(rand() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    const hotGames = shuffled.slice(0, HOT_GAMES_COUNT);
-    hotGames.forEach(game => game.category = 'gamehot');
-    return hotGames;
-}
 
-function renderHotCategories() {
-    const hotCategoriesDiv = document.getElementById('hot-categories');
-    if (!hotCategoriesDiv) return;
-    hotCategoriesDiv.innerHTML = '';
-    hotFranchises.forEach(franchise => {
-        const btn = document.createElement('button');
-        btn.className = 'hot-category-btn' + (franchise === currentHotCategory ? ' active' : '');
-        btn.textContent = franchise;
-        btn.onclick = () => {
-            currentHotCategory = franchise;
-            renderHotCategories();
-            // Filter allGames by category
-            let filtered;
-            if (franchise === 'All') {
-                filtered = allGames;
-            } else {
-                const keyword = franchise.toLowerCase();
-                filtered = allGames.filter(game => game.title && game.title.toLowerCase().includes(keyword));
-            }
-            filteredGames = filtered;
-            currentPage = 1;
-            displayGames(filteredGames);
-            // Hot games should be random daily from filtered list
-            currentHotGames = getHotGames(filtered);
-            renderHotGames(currentHotGames);
-        };
-        hotCategoriesDiv.appendChild(btn);
-    });
-}
 
-function renderHotGames(hotGames) {
-    const hotGamesList = document.getElementById('hot-games');
-    if (!hotGamesList) return;
-    hotGamesList.innerHTML = '';
-    
-    if (!hotGames || hotGames.length === 0) {
-        hotGamesList.innerHTML = '<div style="width:100%; text-align:center; padding:20px; color:var(--color-accent);">No hot games available</div>';
-        return;
-    }
-    
-    // Filter by currentHotCategory if not 'All'
-    let filtered = hotGames;
-    if (currentHotCategory !== 'All') {
-        const keyword = currentHotCategory.toLowerCase();
-        filtered = hotGames.filter(game => game.title && game.title.toLowerCase().includes(keyword));
-    }
-    
-    filtered.forEach(game => {
-        try {
-            if (!game.thumbnail || !game.title || !game.platform || !game.download_link) {
-                console.warn("Skipping invalid hot game:", game);
-                return;
-            }
-            
-            const card = document.createElement('div');
-            card.className = 'hot-game-card';
-            
-            // Use a default image if the thumbnail is missing or broken
-            const imgSrc = game.thumbnail || 'https://placehold.co/200x200/23233a/ffb700?text=Game';
-            
-            // Dùng thẻ a đơn giản với target="_blank" - không sử dụng preventDefault() hay đếm ngược
-            card.innerHTML = `
-                <img src="${imgSrc}" alt="${game.title}" onerror="this.onerror=null; this.src='https://placehold.co/200x200/23233a/ffb700?text=Game';">
-                <div class="hot-game-info">
-                    <h3>${game.title}</h3>
-                    <p><strong>Platform:</strong> ${game.platform}</p>
-                    <a href="${game.download_link}" class="download-btn" target="_blank" rel="noopener">Download</a>
-                </div>
-            `;
-            
-            hotGamesList.appendChild(card);
-        } catch (error) {
-            console.error("Error rendering hot game card:", error);
-        }
-    });
-    
-    if (hotGamesList.children.length === 0) {
-        hotGamesList.innerHTML = '<div style="width:100%; text-align:center; padding:20px; color:var(--color-accent);">No matching hot games found</div>';
-    }
-}
+
+
+
 
 // Load JSON data from file
 async function loadGames() {
@@ -164,18 +51,7 @@ async function loadGames() {
         filteredGames = validGames;
         populateFilters(validGames);
         
-        // Hot games
-        try {
-            currentHotGames = getHotGames(validGames);
-            renderHotCategories();
-            renderHotGames(currentHotGames);
-        } catch (hotError) {
-            console.error("Error rendering hot games:", hotError);
-        }
-        
         displayGames(validGames);
-        const hotGamesSection = document.getElementById('hot-games-section');
-        if (hotGamesSection) hotGamesSection.style.display = '';
     } catch (error) {
         console.error("Error loading games:", error);
         document.getElementById('game-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #f357a8; font-size: 1.2em;">Error loading games. Please try again later.</div>';
@@ -208,15 +84,6 @@ function goToPage(page) {
     currentPage = page;
     displayGames(filteredGames);
     renderPagination(filteredGames.length, currentPage);
-    // Show or hide hot games section based on page
-    const hotGamesSection = document.getElementById('hot-games-section');
-    if (hotGamesSection) {
-        if (currentPage === 1) {
-            hotGamesSection.style.display = '';
-        } else {
-            hotGamesSection.style.display = 'none';
-        }
-    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

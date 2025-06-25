@@ -63,17 +63,17 @@
         
         /* Prevent hover-like effects on touch devices */
         @media (hover: none) {
-            .game, .hot-game-card {
+            .game {
                 transition: none;
                 will-change: auto;
             }
             
-            .download-btn, .hot-category-btn, .toggle-view-btn {
+            .download-btn, .toggle-view-btn {
                 transition: none;
             }
             
             /* Add minimal touch feedback */
-            .game:active, .hot-game-card:active {
+            .game:active {
                 opacity: 0.95;
                 transition: opacity 0.05s ease-out;
             }
@@ -85,7 +85,7 @@
                 -webkit-tap-highlight-color: transparent;
             }
             
-            .game, .hot-game-card {
+            .game {
                 transform: translateZ(0);
                 backface-visibility: hidden;
             }
@@ -198,13 +198,13 @@
             50% { opacity: 0.2; }
         }
         /* Card and button hover/focus effects */
-        .game, .hot-game-card {
+        .game {
             transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.1s ease-out;
             will-change: transform;
         }
         /* Only apply hover effects on devices that support hover */
         @media (hover: hover) and (pointer: fine) {
-            .game:hover, .game:focus, .hot-game-card:hover, .hot-game-card:focus {
+            .game:hover, .game:focus {
                 background: var(--color-card-hover);
                 transform: translateY(-7px) scale(1.04);
                 box-shadow: 0 12px 0 var(--color-accent);
@@ -213,7 +213,7 @@
         
         /* Touch-friendly active states for mobile */
         @media (hover: none) {
-            .game:active, .hot-game-card:active {
+            .game:active {
                 background: var(--color-card-hover);
                 transform: translateY(-2px) scale(1.01);
                 box-shadow: 0 6px 0 var(--color-accent);
@@ -480,37 +480,12 @@
         }
         
         /* Hiệu ứng cho các nút download khi hover */
-        .game:hover .download-btn, 
-        .hot-game-card:hover .download-btn {
+        .game:hover .download-btn {
             background: #1AFF7A;
             color: #392467;
             box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
             border-color: #ffffff;
             transform: translateY(-2px) scale(1.05);
-        }
-        
-        /* Hiệu ứng nút download trong hot game cards */
-        .hot-game-info .download-btn {
-            font-size: 10px;
-            padding: 6px 12px;
-            border-radius: 0;
-            border: 2px solid #ffffff;
-            background: #00FFCC;
-            color: #392467;
-            font-family: 'Press Start 2P', monospace;
-            font-weight: 700;
-            box-shadow: 0 0 12px #00FFCC, 0 1px 0 var(--color-bg-secondary);
-            text-transform: uppercase;
-            animation: neon-pulse-btn 1.5s infinite alternate;
-            letter-spacing: 1px;
-        }
-        
-        .hot-game-info .download-btn:hover {
-            background: #1AFF7A;
-            color: #392467;
-            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
-            animation: none;
-            border-color: #ffffff;
         }
         
         .download-btn .ripple {
@@ -607,18 +582,7 @@
                 border-bottom: 2px solid var(--color-accent);
                 display: block;
             }
-            .hot-game-card img {
-                width: 100%;
-                aspect-ratio: 1 / 1 !important;
-                height: auto;
-                max-width: 100%;
-                max-height: none;
-                object-fit: cover;
-                image-rendering: pixelated;
-                background: #181824;
-                border-bottom: 2px solid var(--color-accent);
-                display: block;
-            }
+
             .filter-inline {
                 display: none !important;
             }
@@ -628,14 +592,7 @@
                 min-width: 60px;
                 min-height: 60px;
             }
-            .hot-game-info h3 {
-                font-size: 0.55em;
-                min-height: 2.2em;
-                max-height: 2.2em;
-            }
-            .hot-game-info p {
-                font-size: 6px;
-            }
+
             #loading-overlay {
                 display: flex !important;
                 align-items: center;
@@ -673,110 +630,7 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .hot-title {
-            color: var(--color-accent);
-            font-size: 1.2em;
-            margin: 32px 0 12px 0;
-            font-family: 'Press Start 2P', monospace;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 0 var(--color-btn-text), 0 0 10px var(--color-accent);
-        }
-        #hot-games-section {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .hot-games-list {
-            display: flex;
-            overflow-x: auto;
-            gap: 12px;
-            padding-bottom: 8px;
-            margin-bottom: 24px;
-            scrollbar-width: thin;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-x;
-        }
-        .hot-game-card {
-            min-width: 150px;
-            max-width: 170px;
-            background: var(--color-card);
-            border: 4px solid var(--color-accent2);
-            border-radius: 0;
-            box-shadow: 0 0 10px var(--color-accent2), 0 4px 0 var(--color-bg-secondary);
-            overflow: hidden;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out;
-            will-change: transform;
-            position: relative;
-            z-index: 1;
-        }
-        @media (hover: hover) and (pointer: fine) {
-            .hot-game-card:hover {
-                transform: translateY(-4px) scale(1.02);
-                box-shadow: 0 0 15px var(--color-accent), 0 8px 0 var(--color-bg-secondary);
-                background: var(--color-card-hover);
-            }
-        }
-        .hot-game-card img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            max-height: 140px;
-            object-fit: cover;
-            image-rendering: pixelated;
-            background: #181824;
-            border-bottom: 2px solid var(--color-accent);
-        }
-        .hot-game-info {
-            padding: 10px 8px 12px 8px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        .hot-game-info h3 {
-            font-size: 0.65em;
-            color: var(--color-text);
-            margin: 0 0 7px 0;
-            font-family: 'Press Start 2P', monospace;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-            font-weight: bold;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-height: 2.2em;
-            max-height: 2.2em;
-            position: relative;
-        }
-        .hot-game-info p {
-            color: var(--color-accent);
-            font-size: 7px;
-            margin: 0 0 8px 0;
-            font-family: 'Press Start 2P', monospace;
-        }
-        .hot-game-info .download-btn {
-            font-size: 10px;
-            padding: 6px 12px;
-            border-radius: 0;
-            border: 2px solid #ffffff;
-            background: #00FFCC;
-            color: #392467;
-            font-family: 'Press Start 2P', monospace;
-            font-weight: 700;
-            box-shadow: 0 0 12px #00FFCC, 0 1px 0 var(--color-bg-secondary);
-            text-transform: uppercase;
-            animation: neon-pulse-btn 1.5s infinite alternate;
-            letter-spacing: 1px;
-        }
-        .hot-game-info .download-btn:hover {
-            background: #1AFF7A;
-            color: #392467;
-            box-shadow: 0 0 20px #1AFF7A, 0 0 40px #1AFF7A, 0 2px 0 var(--color-bg-secondary);
-            animation: none;
-            border-color: #ffffff;
-        }
+
         .filter-inline select {
             padding: 14px 32px 14px 14px;
             border-radius: 0;
@@ -830,20 +684,7 @@
                 padding: 8px 10px;
                 box-shadow: 0 2px 0 var(--color-accent);
             }
-            .hot-game-card {
-                min-width: 130px;
-                max-width: 140px;
-                box-shadow: 0 3px 0 var(--color-accent2);
-                border-width: 3px;
-            }
-            .hot-game-info {
-                padding: 8px 5px 10px 5px;
-            }
-            .hot-game-info .download-btn {
-                font-size: 8px;
-                padding: 5px 10px;
-                margin-top: 2px;
-            }
+
         }
         .list-view {
             display: flex !important;
@@ -906,48 +747,7 @@
                 min-height: 60px;
             }
         }
-        .hot-categories-list {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
-            margin-top: 10px;
-            justify-content: flex-start;
-            touch-action: pan-x;
-            -webkit-overflow-scrolling: touch;
-        }
-        .hot-category-btn {
-            background: var(--color-btn-text);
-            color: var(--color-accent);
-            border: 2px solid var(--color-accent);
-            border-radius: 0;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 12px;
-            padding: 8px 18px;
-            cursor: pointer;
-            box-shadow: 0 2px 0 var(--color-accent2);
-            text-transform: uppercase;
-            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-            white-space: nowrap;
-        }
-        .hot-category-btn.active, .hot-category-btn:hover {
-            background: var(--color-accent);
-            color: var(--color-btn-text);
-            box-shadow: 0 2px 0 var(--color-accent2);
-        }
-        @media (max-width: 480px) {
-            .hot-categories-list {
-                gap: 7px;
-                padding-bottom: 4px;
-                margin-bottom: 7px;
-                margin-top: 7px;
-            }
-            .hot-category-btn {
-                font-size: 10px;
-                padding: 6px 10px;
-            }
-        }
+
         .loading-bbl {
             text-align: center;
             margin-top: 32px;
@@ -1007,41 +807,35 @@
         }
         
         /* Hiệu ứng glow cho cards trong Light mode */
-        body.light-mode .game, 
-        body.light-mode .hot-game-card {
+        body.light-mode .game {
             background: #280064;
             border: 4px solid #ff006f;
             box-shadow: 0 0 10px rgba(255, 0, 111, 0.3), 0 6px 0 #00a0c0;
         }
         
-        body.light-mode .game:hover,
-        body.light-mode .hot-game-card:hover {
+        body.light-mode .game:hover {
             background: #3b0a8c;
             border: 4px solid #ff006f;
             box-shadow: 0 0 15px rgba(255, 0, 111, 0.5), 0 12px 0 #00a0c0;
         }
         
         /* Tăng độ tương phản cho text trong card */
-        body.light-mode .game-info h3,
-        body.light-mode .hot-game-info h3 {
+        body.light-mode .game-info h3 {
             color: #ffffff;
             text-shadow: 1px 1px 0 #000000;
             font-weight: bold;
         }
         
-        body.light-mode .game-info p,
-        body.light-mode .hot-game-info p {
+        body.light-mode .game-info p {
             color: #ff70e5;
         }
         
         /* Thêm viền ngăn cách cho các card */
-        body.light-mode .game,
-        body.light-mode .hot-game-card {
+        body.light-mode .game {
             position: relative;
         }
         
-        body.light-mode .game:after,
-        body.light-mode .hot-game-card:after {
+        body.light-mode .game:after {
             content: '';
             position: absolute;
             bottom: -1px;
@@ -1068,15 +862,7 @@
             border-color: #ff9100;
         }
         
-        body.light-mode .hot-game-card:nth-child(2n+1) {
-            background: #220052;
-            border-color: #00a0c0;
-        }
-        
-        body.light-mode .hot-game-card:nth-child(3n+2) {
-            background: #2c0075;
-            border-color: #9d00ff;
-        }
+
         
         /* Điều chỉnh màu search và filter trong Light mode */
         body.light-mode .search-bar input {
@@ -1134,13 +920,7 @@
             border-bottom: 4px solid #ff006f;
         }
         
-        /* Điều chỉnh màu hot-title trong Light mode */
-        body.light-mode .hot-title {
-            color: #ff006f;
-            text-shadow: 1px 1px 0 rgba(40, 0, 100, 0.2);
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+
         
         /* Thêm style cho theme-toggle-btn trong Light mode */
         body.light-mode .theme-toggle-btn {
@@ -1238,13 +1018,7 @@
             box-shadow: 0 0 12px rgba(255, 0, 111, 0.5), 0 4px 0 #ff006f;
         }
         
-        /* Điều chỉnh màu hot-title trong Light mode */
-        body.light-mode .hot-title {
-            color: #280064;
-            text-shadow: 1px 1px 0 rgba(255, 0, 111, 0.2);
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
+
         
         /* Điều chỉnh màu list-item trong Light mode */
         body.light-mode .game.list-item {
@@ -1290,14 +1064,12 @@
         }
         
         /* Điều chỉnh thêm style cho image trong thẻ game */
-        body.light-mode .game img,
-        body.light-mode .hot-game-card img {
+        body.light-mode .game img {
             border-bottom-color: #ff006f;
         }
         
         /* Hiệu ứng đặc biệt cho nút download trong các thẻ game */
-        body.light-mode .game:hover .download-btn,
-        body.light-mode .hot-game-card:hover .download-btn {
+        body.light-mode .game:hover .download-btn {
             background: #ff006f;
             box-shadow: 0 0 15px rgba(255, 0, 111, 0.7), 0 2px 0 #00a0c0;
         }
@@ -1318,15 +1090,7 @@
             border-color: #8FE1FF;
         }
         
-        .hot-game-card:nth-child(2n+1) {
-            background: #D253D8;
-            border-color: #8FE1FF;
-        }
-        
-        .hot-game-card:nth-child(3n+2) {
-            background: #F180FF;
-            border-color: #8FE1FF;
-        }
+
         
         /* Thêm border glow nổi bật cho thẻ game trong Dark mode */
         .game {
@@ -1374,21 +1138,20 @@
         }
         
         /* Nâng cao độ tương phản cho text trong thẻ game */
-        .game-info h3, .hot-game-info h3 {
+        .game-info h3 {
             position: relative;
             color: #392467;
             text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
             font-weight: bold;
         }
         
-        .game-info p, .hot-game-info p {
+        .game-info p {
             color: #392467;
             font-weight: bold;
         }
         
         /* Thêm hiệu ứng cho các nút download khi hover */
-        .game:hover .download-btn, 
-        .hot-game-card:hover .download-btn {
+        .game:hover .download-btn {
             background-color: var(--color-accent);
             color: var(--color-btn-text-hover);
             box-shadow: 0 0 15px var(--color-accent), 0 0 25px var(--color-accent), 0 2px 0 var(--color-bg-secondary);
@@ -1396,44 +1159,18 @@
         }
         
         /* Thêm hiệu ứng border glow cho các thẻ game khi hover */
-        .game:hover, .hot-game-card:hover {
+        .game:hover {
             outline: 1px solid var(--color-accent2);
         }
         
-        /* Điều chỉnh hot game cards vầ hiệu ứng */
-        .hot-game-card {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .hot-game-card::after {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            right: -1px;
-            bottom: -1px;
-            background: transparent;
-            border-radius: 0;
-            border: 2px solid transparent;
-            box-shadow: 0 0 15px rgba(143, 225, 255, 0.5);
-            z-index: -1;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        
-        .hot-game-card:hover::after {
-            opacity: 1;
-            border-color: var(--color-accent2);
-            box-shadow: 0 0 20px rgba(143, 225, 255, 0.8);
-        }
+
         
         /* Hiệu ứng zoom ảnh khi hover */
-        .game img, .hot-game-card img {
+        .game img {
             transition: transform 0.3s ease;
         }
         
-        .game:hover img, .hot-game-card:hover img {
+        .game:hover img {
             transform: scale(1.05);
         }
         
@@ -1443,7 +1180,7 @@
         }
         
         /* Tăng cường hiệu ứng viền gradient cho card */
-        .game::before, .hot-game-card::before {
+        .game::before {
             content: '';
             position: absolute;
             bottom: 0;
@@ -1456,7 +1193,7 @@
             pointer-events: none;
         }
         
-        .game:hover::before, .hot-game-card:hover::before {
+        .game:hover::before {
             opacity: 1;
             height: 4px;
         }
@@ -1514,10 +1251,7 @@
             box-shadow: 0 2px 0 var(--color-accent);
         }
         
-        .hot-title {
-            color: var(--color-accent2);
-            text-shadow: 2px 2px 0 var(--color-bg), 0 0 10px var(--color-accent2);
-        }
+
     </style>
 </head>
 <body>
@@ -1557,11 +1291,7 @@
                 <span class="theme-icon">🌙</span> <span class="theme-label">Dark</span>
             </button>
         </div>
-        <div id="hot-games-section">
-            <div id="hot-categories" class="hot-categories-list"></div>
-            <h2 class="hot-title">Hot Games</h2>
-            <div id="hot-games" class="hot-games-list"></div>
-        </div>
+
         <div class="grid" id="game-list"></div>
         <div id="pagination" class="pagination-bar"></div>
     </div>
@@ -1642,7 +1372,7 @@
         }
         
         // Apply touch handling to existing game cards
-        document.querySelectorAll('.game, .hot-game-card').forEach(addTouchHandling);
+        document.querySelectorAll('.game').forEach(addTouchHandling);
         
         // Optimized observer for performance
         const observer = new MutationObserver(function(mutations) {
@@ -1650,16 +1380,16 @@
             requestAnimationFrame(() => {
                 mutations.forEach(function(mutation) {
                     mutation.addedNodes.forEach(function(node) {
-                        if (node.nodeType === 1) { // Element node
-                            if (node.classList && (node.classList.contains('game') || node.classList.contains('hot-game-card'))) {
-                                addTouchHandling(node);
-                            }
-                            // Also check child elements
-                            const childCards = node.querySelectorAll && node.querySelectorAll('.game, .hot-game-card');
-                            if (childCards) {
-                                childCards.forEach(addTouchHandling);
-                            }
+                                            if (node.nodeType === 1) { // Element node
+                        if (node.classList && node.classList.contains('game')) {
+                            addTouchHandling(node);
                         }
+                        // Also check child elements
+                        const childCards = node.querySelectorAll && node.querySelectorAll('.game');
+                        if (childCards) {
+                            childCards.forEach(addTouchHandling);
+                        }
+                    }
                     });
                 });
             });
