@@ -90,6 +90,44 @@
                 backface-visibility: hidden;
             }
         }
+        
+        /* Loading spinner animation */
+        .loading-spinner {
+            display: inline-block;
+            animation: spin 2s linear infinite;
+            font-size: 2em;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error retry button hover effects */
+        .retry-btn {
+            background: var(--color-accent);
+            color: var(--color-btn-text);
+            border: 2px solid var(--color-accent);
+            padding: 12px 24px;
+            border-radius: 0;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 var(--color-accent2);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+        
+        .retry-btn:hover {
+            background: var(--color-accent2);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--color-accent);
+        }
+        
+        .retry-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 var(--color-accent2);
+        }
         body {
             font-size: 13px;
             background: var(--color-bg);

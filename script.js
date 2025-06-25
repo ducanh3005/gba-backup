@@ -32,30 +32,146 @@ function populateFilters(games) {
 
 
 
-// Load JSON data from file
-async function loadGames() {
+// Load JSON data from file with retry mechanism
+async function loadGames(retryCount = 0, fileName = 'games.json') {
+    const maxRetries = 3;
+    const retryDelay = 1000; // 1 second
+    const fallbackFiles = ['games.json', 'gbaroms.json', 'sgame.json']; // Fallback options
+    
     try {
-        const response = await fetch('games.json');
+        // Show loading message
+        updateLoadingMessage(`Loading games... ${retryCount > 0 ? `(Attempt ${retryCount + 1}/${maxRetries + 1})` : ''}`);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+        
+        const response = await fetch(fileName, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
-            throw new Error(`Failed to fetch games: ${response.status} ${response.statusText}`);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+        
         const games = await response.json();
-        const validGames = games.filter(game => game.download_link !== null);
+        
+        if (!Array.isArray(games)) {
+            throw new Error('Invalid data format: Expected array of games');
+        }
+        
+        const validGames = games.filter(game => 
+            game && 
+            game.download_link !== null && 
+            game.title && 
+            game.platform && 
+            game.thumbnail
+        );
         
         if (validGames.length === 0) {
-            console.error("No valid games found in the data");
-            return;
+            throw new Error("No valid games found in the data");
         }
         
+        // Success! Hide loading and display games
+        hideLoadingMessage();
         allGames = validGames;
         filteredGames = validGames;
         populateFilters(validGames);
-        
         displayGames(validGames);
+        
+        console.log(`✅ Successfully loaded ${validGames.length} games`);
+        
     } catch (error) {
-        console.error("Error loading games:", error);
-        document.getElementById('game-list').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #f357a8; font-size: 1.2em;">Error loading games. Please try again later.</div>';
+        console.error(`❌ Error loading games (attempt ${retryCount + 1}):`, error);
+        
+        // Determine error type for better user feedback
+        let errorMessage = error.message;
+        if (error.name === 'AbortError') {
+            errorMessage = 'Request timed out. The server may be slow or unreachable.';
+        } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            errorMessage = 'Network error. Please check your internet connection.';
+        } else if (error.message.includes('HTTP 404')) {
+            errorMessage = 'Games data file not found on server.';
+        } else if (error.message.includes('HTTP 500')) {
+            errorMessage = 'Server error. Please try again later.';
+        }
+        
+        if (retryCount < maxRetries) {
+            // Retry after delay with exponential backoff
+            const delayTime = retryDelay * Math.pow(2, retryCount); // Exponential backoff
+            updateLoadingMessage(`Loading failed. Retrying in ${delayTime/1000}s... (${retryCount + 1}/${maxRetries})`);
+            setTimeout(() => {
+                loadGames(retryCount + 1, fileName);
+            }, delayTime);
+        } else {
+            // Try fallback files if we haven't tried them yet
+            const currentFileIndex = fallbackFiles.indexOf(fileName);
+            const nextFileIndex = currentFileIndex + 1;
+            
+            if (nextFileIndex < fallbackFiles.length) {
+                const nextFile = fallbackFiles[nextFileIndex];
+                console.log(`🔄 Trying fallback file: ${nextFile}`);
+                updateLoadingMessage(`Trying alternative data source: ${nextFile}...`);
+                setTimeout(() => {
+                    loadGames(0, nextFile); // Reset retry count for new file
+                }, 1000);
+            } else {
+                // All files exhausted, show final error
+                showErrorMessage(errorMessage);
+            }
+        }
     }
+}
+
+// Helper functions for loading states
+function updateLoadingMessage(message) {
+    const gameList = document.getElementById('game-list');
+    if (gameList) {
+        gameList.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; color: var(--color-accent); font-size: 1.2em; padding: 40px;">
+                <div class="loading-spinner" style="margin-bottom: 20px;">🎮</div>
+                ${message}
+            </div>
+        `;
+    }
+}
+
+function hideLoadingMessage() {
+    // Loading will be replaced by actual games, so no need to explicitly hide
+}
+
+function showErrorMessage(errorMessage) {
+    const gameList = document.getElementById('game-list');
+    if (gameList) {
+        gameList.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                <div style="color: #ff4444; font-size: 1.2em; margin-bottom: 20px;">
+                    ❌ Error Loading Games
+                </div>
+                <div style="color: var(--color-text); margin-bottom: 20px; font-size: 0.9em;">
+                    ${errorMessage}
+                </div>
+                <div style="margin-bottom: 20px; font-size: 0.8em; color: var(--color-accent); opacity: 0.8;">
+                    💡 Try refreshing the page or check your internet connection
+                </div>
+                <button onclick="retryLoadGames()" class="retry-btn">
+                    🔄 Retry Loading
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Global retry function
+function retryLoadGames() {
+    console.log('🔄 User initiated retry...');
+    loadGames(0); // Reset retry count
 }
 
 function renderPagination(totalGames, currentPage) {
@@ -224,5 +340,30 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(hideOverlay, 3000); // fallback in case load event is slow
 });
 
-// Load the games data
-loadGames();
+// Enhanced initialization with network detection
+function initializeApp() {
+    // Check if we're online
+    if (!navigator.onLine) {
+        showErrorMessage('No internet connection. Please check your network and try again.');
+        return;
+    }
+    
+    // Load the games data
+    loadGames();
+}
+
+// Add online/offline event listeners
+window.addEventListener('online', function() {
+    console.log('🌐 Connection restored');
+    if (document.getElementById('game-list').innerHTML.includes('No internet connection')) {
+        loadGames();
+    }
+});
+
+window.addEventListener('offline', function() {
+    console.log('📡 Connection lost');
+    showErrorMessage('Connection lost. Please check your internet connection.');
+});
+
+// Initialize app
+initializeApp();
