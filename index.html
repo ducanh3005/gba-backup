@@ -43,6 +43,17 @@
             user-select: none !important;
             -webkit-touch-callout: none !important;
         }
+        
+        /* Ensure smooth scrolling on mobile */
+        body {
+            touch-action: pan-y pinch-zoom;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Allow scrolling on main container */
+        .container {
+            touch-action: pan-y pinch-zoom;
+        }
         body {
             font-size: 13px;
             background: var(--color-bg);
@@ -655,6 +666,7 @@
             margin-bottom: 24px;
             scrollbar-width: thin;
             -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
         }
         .hot-game-card {
             min-width: 150px;
@@ -873,6 +885,8 @@
             margin-bottom: 10px;
             margin-top: 10px;
             justify-content: flex-start;
+            touch-action: pan-x;
+            -webkit-overflow-scrolling: touch;
         }
         .hot-category-btn {
             background: var(--color-btn-text);
@@ -1472,6 +1486,16 @@
     </style>
 </head>
 <body>
+    <!-- Loading overlay -->
+    <div id="loading-overlay">
+        <div class="pixel-spinner">
+            <div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="sticky-search">
             <div></div>
@@ -1523,37 +1547,91 @@
             isLight = true;
             setTheme(true);
         }
-        // Disable long press actions (stronger)
-        function preventAll(e) { e.preventDefault(); }
+        // Disable long press actions while preserving scroll
+        function preventContextMenu(e) { e.preventDefault(); }
+        function preventSelect(e) { e.preventDefault(); }
+        function preventDrag(e) { e.preventDefault(); }
+        
+        // Apply context menu and selection prevention to document
         [document, document.body].forEach(el => {
-            el.addEventListener('contextmenu', preventAll);
-            el.addEventListener('selectstart', preventAll);
-            el.addEventListener('dragstart', preventAll);
-            el.addEventListener('gesturestart', preventAll);
-            el.addEventListener('touchstart', preventAll, { passive: false });
+            el.addEventListener('contextmenu', preventContextMenu);
+            el.addEventListener('selectstart', preventSelect);
+            el.addEventListener('dragstart', preventDrag);
+            // Remove touchstart prevention to allow scrolling
         });
-        // Also apply to all a, img, button, input, textarea
+        
+        // Apply to specific elements that need long press prevention
         const longPressEls = document.querySelectorAll('a, img, button, input, textarea');
         longPressEls.forEach(el => {
-            el.addEventListener('contextmenu', preventAll);
-            el.addEventListener('selectstart', preventAll);
-            el.addEventListener('dragstart', preventAll);
-            el.addEventListener('gesturestart', preventAll);
-            el.addEventListener('touchstart', preventAll, { passive: false });
+            el.addEventListener('contextmenu', preventContextMenu);
+            el.addEventListener('selectstart', preventSelect);
+            el.addEventListener('dragstart', preventDrag);
+            // Only prevent long press on specific elements, not touchstart
+            el.addEventListener('touchstart', function(e) {
+                // Only prevent if it's not a scroll gesture
+                if (e.touches.length === 1) {
+                    const startY = e.touches[0].clientY;
+                    const startTime = Date.now();
+                    
+                    const touchMove = function(moveEvent) {
+                        const deltaY = Math.abs(moveEvent.touches[0].clientY - startY);
+                        const deltaTime = Date.now() - startTime;
+                        
+                        // If user is scrolling (moved more than 10px vertically), allow it
+                        if (deltaY > 10) {
+                            el.removeEventListener('touchmove', touchMove);
+                            el.removeEventListener('touchend', touchEnd);
+                        }
+                    };
+                    
+                    const touchEnd = function() {
+                        el.removeEventListener('touchmove', touchMove);
+                        el.removeEventListener('touchend', touchEnd);
+                    };
+                    
+                    el.addEventListener('touchmove', touchMove, { passive: true });
+                    el.addEventListener('touchend', touchEnd, { passive: true });
+                }
+            }, { passive: true });
         });
-        // Prevent pointerdown long press (400ms)
+        // Prevent long press without interfering with scroll
         let pressTimer = null;
+        let startY = null;
+        let isDragging = false;
+        
         document.addEventListener('pointerdown', function(e) {
+            startY = e.clientY;
+            isDragging = false;
+            
             pressTimer = setTimeout(() => {
-                e.preventDefault();
+                if (!isDragging) {
+                    // Only prevent if not scrolling
+                    e.preventDefault();
+                }
             }, 400);
-        });
+        }, { passive: true });
+        
+        document.addEventListener('pointermove', function(e) {
+            if (startY !== null) {
+                const deltaY = Math.abs(e.clientY - startY);
+                if (deltaY > 10) {
+                    isDragging = true;
+                    clearTimeout(pressTimer);
+                }
+            }
+        }, { passive: true });
+        
         document.addEventListener('pointerup', function() {
             clearTimeout(pressTimer);
-        });
+            startY = null;
+            isDragging = false;
+        }, { passive: true });
+        
         document.addEventListener('pointerleave', function() {
             clearTimeout(pressTimer);
-        });
+            startY = null;
+            isDragging = false;
+        }, { passive: true });
     });
     </script>
 </body>
